@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
-import { UseTokenGetUser } from '@/hooks/fetchUser';
+import { UseTokenGetUser } from '@/hooks/users/fetchUser';
 
 type User = {
     id: number,

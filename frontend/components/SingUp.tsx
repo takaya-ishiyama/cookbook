@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router';
 import { User, UserRegister } from '../type/UserType'
-import { useMutationUserRegist } from '@/hooks/usermutationUserRegist';
+import { useMutationUserRegist } from '@/hooks/users/usermutationUserRegist';
 
 const SingUp = () => {
     const {

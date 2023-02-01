@@ -1,4 +1,4 @@
-import { GetUser } from '@/hooks/fetchUser';
+import { GetUser } from '@/hooks/users/fetchUser';
 import { Box, Button, Flex, Input, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
