@@ -16,7 +16,12 @@ const Home = () => {
   // @ts-ignore
   const cookbookdata = useQueryCookBook(user?.id);
   console.log(cookbookdata.data);
-  return <></>;
+  return (
+    <>
+      <Box>ホーム</Box>
+      <Box>もう少しまってて</Box>
+    </>
+  );
 };
 
 export default Home;

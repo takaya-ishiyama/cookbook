@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { destroyCookie } from 'nookies';
 import React from 'react';
 
 const HeaderComponent = () => {
@@ -33,13 +34,15 @@ const HeaderComponent = () => {
               display={'inline-block'}
               bgColor={'#edf2f7'}
               onClick={() => {
-                router.push('/login');
+                destroyCookie(null, 'accessToken');
+                destroyCookie(null, 'refreshToken');
+                router.push('/');
               }}
               as={Button}
             >
-              Longin
+              ログアウト
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               textAlign={'center'}
               display={'inline-block'}
               bgColor={'#edf2f7'}
@@ -49,7 +52,7 @@ const HeaderComponent = () => {
               as={Button}
             >
               Sign up
-            </MenuItem>
+            </MenuItem> */}
           </MenuList>
         </Menu>
       </Flex>
