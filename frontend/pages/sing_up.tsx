@@ -1,5 +1,5 @@
 import React from 'react'
-import SingUp from '../components/SingUp';
+import SingUp from '../src/components/SingUp';
 
 const sing_up = () => {
   return (

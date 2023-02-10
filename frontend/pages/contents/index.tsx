@@ -1,10 +1,8 @@
-import Home from '@/components/MainContents/Home'
-import React from 'react'
+import Home from '@/src/components/MainContents/Home';
+import React from 'react';
 
 const index = () => {
-  return (
-    <Home/>
-  )
-}
+  return <Home />;
+};
 
-export default index
+export default index;

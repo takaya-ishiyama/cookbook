@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --dir src"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
@@ -32,6 +32,8 @@
     "typescript": "4.9.5"
   },
   "devDependencies": {
-    "@types/react-query": "^1.2.9"
+    "@types/react-query": "^1.2.9",
+    "eslint-config-prettier": "^8.6.0",
+    "prettier": "^2.8.3"
   }
 }
