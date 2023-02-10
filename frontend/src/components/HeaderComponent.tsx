@@ -19,7 +19,7 @@ const HeaderComponent = () => {
     <Box px={4} h={50} bgColor={'#edf2f7'}>
       <Flex>
         <Box px={2} fontSize={'35px'}>
-          <Link href={'/'}>header</Link>
+          <Link href={'/contents'}>header</Link>
         </Box>
         <Spacer />
         <Menu>

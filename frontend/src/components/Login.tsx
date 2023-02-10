@@ -1,5 +1,5 @@
 import { GetUser } from '@/src/hooks/users/fetchUser';
-import { Box, Button, Flex, Input, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Spacer, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -50,30 +50,46 @@ const Login = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Flex mx={'1rem'} w={'40%'} flexFlow={'column'}>
-          <Box>名前</Box>
-          <Input
-            mb={3}
-            borderColor={errors.username ? 'red' : 'glay'}
-            {...register('username', { required: '入力してください' })}
-          />
+        <Flex mx={'1rem'} flexFlow={'column'}>
+          <Flex>
+            <Spacer />
+            <Flex direction={'column'}>
+              <Box>名前</Box>
+              <Input
+                mb={3}
+                borderColor={errors.username ? 'red' : 'glay'}
+                {...register('username', { required: '入力してください' })}
+              />
+            </Flex>
+            <Spacer />
+          </Flex>
           {/* {errors.username && errors.username.message} */}
-          <Box>パスワード</Box>
-          <Input
-            mb={3}
-            borderColor={errors.password ? 'red' : 'glay'}
-            {...register('password', { required: '入力してください' })}
-          />
+          <Flex>
+            <Spacer />
+            <Flex direction={'column'}>
+              <Box>パスワード</Box>
+              <Input
+                mb={'10px'}
+                borderColor={errors.password ? 'red' : 'glay'}
+                {...register('password', { required: '入力してください' })}
+              />
+            </Flex>
+            <Spacer />
+          </Flex>
           {/* {errors.password && errors.password.message} */}
-          <Button
-            w={'15%'}
-            display={'inline-block'}
-            type='submit'
-            bgColor={'blue.300'}
-            onClick={() => getuser()}
-          >
-            送信
-          </Button>
+          <Flex>
+            <Spacer />
+            <Button
+              w={'15%'}
+              display={'inline-block'}
+              type='submit'
+              bgColor={'blue.300'}
+              onClick={() => getuser()}
+            >
+              送信
+            </Button>
+            <Spacer />
+          </Flex>
         </Flex>
       </form>
     </>
