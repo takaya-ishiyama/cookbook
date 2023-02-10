@@ -15,6 +15,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useRouter } from 'next/router';
 import { User, UserRegister } from '../type/UserType';
 import { useMutationUserRegist } from '@/src/hooks/users/usermutationUserRegist';
+import Link from 'next/link';
+import UserPolicy from './UserPolicy';
+import { GetUser } from '../hooks/users/fetchUser';
+import error from 'next/error';
 
 const SingUp = () => {
   const {
@@ -27,14 +31,31 @@ const SingUp = () => {
   } = useForm<UserRegister>({ reValidateMode: 'onSubmit' });
   const watch_field = watch('password1', 'password2');
   const [userpolicy, setUserPolicy] = useState<boolean>(false);
+  const toast = useToast();
+  const router = useRouter();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(e);
   };
 
-  const toast = useToast();
-  const router = useRouter();
+  const getuser = async (username: string, password: string) => {
+    const resp = await GetUser(username, password);
+    const user: User = await resp?.json();
+    if (user) {
+      console.log('sucsess');
+      localStorage.setItem('user', JSON.stringify(user));
+      router.push(`contents`);
+    } else {
+      toast({
+        title: 'login faild',
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+    }
+  };
+
   const MutationUser = useMutationUserRegist(
     getValues().username,
     getValues().password1,
@@ -48,7 +69,9 @@ const SingUp = () => {
           position: 'top-right',
           isClosable: true,
         });
-        router.push(`contents`);
+        getuser(getValues().username, getValues().password1).then(() =>
+          router.push(`/contents`),
+        );
       },
       onError: (error) => {
         console.log('保存失敗');
@@ -81,7 +104,13 @@ const SingUp = () => {
           <Flex>
             <Spacer />
             <Flex direction={'column'}>
-              <Box>名前</Box>
+              <Flex direction={'row'}>
+                <Box>名前</Box>
+                <Spacer />
+                <Box color={'red'} mx={'5px'}>
+                  ※必須
+                </Box>
+              </Flex>
               <Input
                 mb={3}
                 borderColor={errors.username ? 'red' : 'glay'}
@@ -94,7 +123,13 @@ const SingUp = () => {
           <Flex>
             <Spacer />
             <Flex direction={'column'}>
-              <Box>パスワード</Box>
+              <Flex direction={'row'}>
+                <Box>パスワード</Box>
+                <Spacer />
+                <Box color={'red'} mx={'5px'}>
+                  ※必須
+                </Box>
+              </Flex>
               <Input
                 mb={3}
                 borderColor={errors.password1 ? 'red' : 'glay'}
@@ -107,7 +142,13 @@ const SingUp = () => {
           <Flex>
             <Spacer />
             <Flex direction={'column'}>
-              <Box>パスワード確認</Box>
+              <Flex direction={'row'}>
+                <Box>パスワード確認</Box>
+                <Spacer />
+                <Box color={'red'} mx={'5px'}>
+                  ※必須
+                </Box>
+              </Flex>
               <Input
                 mb={3}
                 borderColor={errors.password2 ? 'red' : 'glay'}
@@ -174,7 +215,14 @@ const SingUp = () => {
             <Spacer />
             <Flex direction={'column'}>
               <Flex direction={'column'}>
-                <Box>利用規約</Box>
+                <Box
+                  m={'10px'}
+                  //   onClick={() => {
+                  //     return <UserPolicy />;
+                  //   }}
+                >
+                  利用規約
+                </Box>
                 <Checkbox
                   size={'lg'}
                   checked={userpolicy}
