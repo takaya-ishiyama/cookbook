@@ -1,4 +1,4 @@
-import { Top } from "../components/Top";
+import { Top } from "../src/components/Top";
 
 
 export default function Home() {

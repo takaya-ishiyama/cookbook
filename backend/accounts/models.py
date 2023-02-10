@@ -36,7 +36,7 @@ SEX_CHOICES = (
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True, editable=False)
     username=models.CharField(verbose_name='username', max_length=30, unique=True)
-    password=models.CharField(verbose_name='password', max_length=20)
+    # password=models.CharField(verbose_name='password', max_length=16)
     email = models.EmailField(verbose_name='email', null=True, blank=True)
     icon = models.ImageField(verbose_name='プロフィール画像', upload_to="icon/", blank=True, null=True)
     birth=models.DateField(verbose_name='誕生日', null=True, blank=True)
@@ -49,7 +49,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
     USERNAME_FIELD="username"
-    # EMAIL_FIELD='email'
 
     def __str__(self):
         return self.username
