@@ -3,6 +3,7 @@ from accounts.models import User
 from django.utils import timezone
 
 class CookItem(models.Model):
+    id = models.AutoField(primary_key=True)
     items = models.CharField(max_length=50, null=True, blank=True)
     quantity = models.IntegerField(null=True, blank=True)
 

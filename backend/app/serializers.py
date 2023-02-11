@@ -9,13 +9,15 @@ class RecursiveField(serializers.Serializer):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
-class CookBookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CookBook
-        fields = '__all__'
-
 
 class CookItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CookItem
         fields = '__all__'
+
+class CookBookSerializer(serializers.ModelSerializer):
+    user=UserSerializer()
+    cookitems = CookItemSerializer()
+    class Meta:
+        model = CookBook
+        fields = ('id','title','url','memo','user','cookitems')
