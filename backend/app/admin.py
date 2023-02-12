@@ -6,17 +6,18 @@ from .models import CookBook, CookItem
 class AdminRoom(admin.ModelAdmin):
     list_display = (
         'user',
-        'id',
+        'cookbook_id',
         'title',
         'url',
         'memo',
-        'cookitems',
+        # 'cookitems',
     )
 
 @admin.register(CookItem)
 class AdminRoom(admin.ModelAdmin):
     list_display = (
-        'id',
-        'items',
+        'cookitem_id',
+        'item',
         'quantity',
+        'cookbook'
     )
