@@ -3,3 +3,5 @@ nginx/logs/nginx/error.log
 ./memo
 frontend/.next
 frontend/node_modules
+backend/accounts/__pycache__
+backend/app/__pycache__

@@ -1,4 +1,4 @@
-import { CookBooks } from '@/src/type/UserType';
+import { CookBooks } from '@/src/type/CookBookType';
 import axios, { AxiosError } from 'axios';
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 

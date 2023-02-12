@@ -1,21 +1,19 @@
-from dataclasses import fields
 from rest_framework import serializers
 from .models import CookItem, CookBook
 from accounts.serializers import UserSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
-
-class RecursiveField(serializers.Serializer):
-    def to_representation(self, value):
-        serializer = self.parent.parent.__class__(value, context=self.context)
-        return serializer.data
-
-class CookBookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CookBook
-        fields = '__all__'
-
+from .models import CookItem
 
 class CookItemSerializer(serializers.ModelSerializer):
+    # cookbook = CookBookSerializer()
     class Meta:
         model = CookItem
-        fields = '__all__'
+        fields = ('cookitem_id','item','quantity','cookbook')
+
+class CookBookSerializer(serializers.ModelSerializer):
+    user=UserSerializer()
+    cookitem = CookItemSerializer(many=True)
+    # cookitem = serializers.PrimaryKeyRelatedField(many=True)
+    class Meta:
+        model = CookBook
+        fields = ('cookbook_id','title','url','memo','user','cookitem')
