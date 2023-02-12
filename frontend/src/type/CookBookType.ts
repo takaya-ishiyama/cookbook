@@ -1,9 +1,9 @@
 import { User } from './UserType';
 
 type CookItem = {
-  items: string;
+  item: string;
   quantity: number;
-};
+}[];
 
 export type CookBooks = {
   id: number;
@@ -12,7 +12,7 @@ export type CookBooks = {
   memo: string;
   //   created_at: string;
   user: any;
-  cookitems: any;
+  cookitem: any;
 }[];
 
 export type CookBook = {
@@ -22,5 +22,5 @@ export type CookBook = {
   memo: string;
   //   created_at: string;
   user: User;
-  cookitems: CookItem;
+  cookitem: CookItem;
 };
