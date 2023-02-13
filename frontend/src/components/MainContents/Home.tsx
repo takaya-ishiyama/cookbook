@@ -1,7 +1,15 @@
 import useQueryCookBook from '@/src/hooks/cookbook/useQueryCookBook';
 import { CookBook } from '@/src/type/CookBookType';
 import { User } from '@/src/type/UserType';
-import { Box, Flex, Input, Spacer, Spinner, Textarea } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Spacer,
+  Spinner,
+  Textarea,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 const Home = () => {
@@ -52,7 +60,7 @@ const Home = () => {
           })}
           <Box m='5px' mx={'10px'}>
             <Box>メモ</Box>
-            <Textarea value={cookbook.memo} borderColor={'black'} />
+            <Textarea value={cookbook.memo} borderColor={'black'} disabled />
           </Box>
         </Flex>
       </>
@@ -61,13 +69,22 @@ const Home = () => {
 
   return (
     <>
-      <Flex direction={'column'}>
-        <Box>ホーム</Box>
-        <Box>もう少しまってて</Box>
-        {cookbookdata?.data?.map((list: CookBook, index: number) => {
-          return <>{cookbook(list)}</>;
-        })}
-      </Flex>
+      <form>
+        <Flex direction={'column'}>
+          <Flex direction={'row'}></Flex>
+          <Flex direction={'row'} py={'20px'} mt={'10px'}>
+            <Spacer />
+            <Input w={'35%'} borderColor='black' />
+            <Button mx={'10px'} colorScheme={'blue'}>
+              検索
+            </Button>
+            <Spacer />
+          </Flex>
+          {cookbookdata?.data?.map((list: CookBook) => {
+            return <>{cookbook(list)}</>;
+          })}
+        </Flex>
+      </form>
     </>
   );
 };

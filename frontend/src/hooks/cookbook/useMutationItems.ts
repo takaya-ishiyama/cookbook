@@ -8,7 +8,7 @@ import {
 
 const base_url = 'http://localhost:8000/app/api';
 
-const useMutationItems = (
+const useMutationPostItem = (
   user_id: number,
   title: string,
   options?: UseMutationOptions<CookBooks, AxiosError, CookBooks, undefined>,
@@ -22,4 +22,4 @@ const useMutationItems = (
     return data;
   }, options);
 };
-export default useMutationItems;
+export default useMutationPostItem;

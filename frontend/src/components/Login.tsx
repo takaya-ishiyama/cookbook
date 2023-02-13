@@ -83,7 +83,7 @@ const Login = () => {
               w={'15%'}
               display={'inline-block'}
               type='submit'
-              bgColor={'blue.300'}
+              colorScheme={'blue'}
               onClick={() => getuser()}
             >
               送信

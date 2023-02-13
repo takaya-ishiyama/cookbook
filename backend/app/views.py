@@ -3,7 +3,6 @@ from .serializers import CookBookSerializer
 from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from django.db.models import Q
-from django_filters import rest_framework as filters
 
 class CookBookListView(generics.ListAPIView):
     serializer_class = CookBookSerializer
@@ -24,5 +23,4 @@ class CookBookUpdateView(generics.UpdateAPIView):
 class CookBookCreateView(generics.ListCreateAPIView):
     serializer_class = CookBookSerializer
     queryset=CookBook.objects.all()
-    filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = '__all__'
+

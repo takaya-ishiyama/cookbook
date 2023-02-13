@@ -236,7 +236,7 @@ const SingUp = () => {
               <Button
                 display={'inline-block'}
                 type='submit'
-                bgColor={'blue.300'}
+                colorScheme={'blue'}
                 textAlign={'center'}
                 disabled={!userpolicy}
                 onClick={() => {
