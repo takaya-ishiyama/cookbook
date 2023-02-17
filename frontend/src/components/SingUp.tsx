@@ -50,7 +50,7 @@ const SingUp = () => {
       toast({
         title: 'login faild',
         status: 'error',
-        position: 'top-right',
+        position: 'top',
         isClosable: true,
       });
     }
@@ -66,7 +66,7 @@ const SingUp = () => {
         toast({
           title: '成功',
           status: 'success',
-          position: 'top-right',
+          position: 'top',
           isClosable: true,
         });
         getuser(getValues().username, getValues().password1).then(() =>
@@ -78,7 +78,7 @@ const SingUp = () => {
         toast({
           title: '失敗',
           status: 'error',
-          position: 'top-right',
+          position: 'top',
           isClosable: true,
         });
         console.log(error);

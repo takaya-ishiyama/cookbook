@@ -10,9 +10,11 @@ import {
   Spinner,
   Textarea,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const Home = () => {
+  const router = useRouter();
   const [user, setUser] = useState<User>();
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -26,6 +28,7 @@ const Home = () => {
   const cookbookdata = useQueryCookBook(user?.id);
   console.log(cookbookdata.data);
 
+  // レシピ一覧
   function cookbook(cookbook: CookBook) {
     return (
       <>
@@ -52,7 +55,12 @@ const Home = () => {
                   <Spacer />
                   <Box mx={'2rem'}>{value.item}</Box>
                   <Spacer />
-                  <Box mx={'2rem'}>{value.quantity}</Box>
+                  <Box mx={'2rem'}>
+                    <>
+                      {value.quantity}
+                      {value.unit}
+                    </>
+                  </Box>
                   <Spacer />
                 </Flex>
               </>
@@ -60,7 +68,11 @@ const Home = () => {
           })}
           <Box m='5px' mx={'10px'}>
             <Box>メモ</Box>
-            <Textarea value={cookbook.memo} borderColor={'black'} disabled />
+            <Textarea
+              value={cookbook.memo ?? ''}
+              borderColor={'black'}
+              disabled
+            />
           </Box>
         </Flex>
       </>
@@ -71,7 +83,22 @@ const Home = () => {
     <>
       <form>
         <Flex direction={'column'}>
-          <Flex direction={'row'}></Flex>
+          <Flex direction={'row'}>
+            <Spacer />
+            <Button
+              w={'5rem'}
+              mx={'10px'}
+              mt={'20px'}
+              colorScheme={'blue'}
+              onClick={() => router.push('/contents/create')}
+            >
+              追加
+            </Button>
+            <Button w={'5rem'} mx={'10px'} mt={'20px'} colorScheme={'blue'}>
+              編集
+            </Button>
+            <Spacer />
+          </Flex>
           <Flex direction={'row'} py={'20px'} mt={'10px'}>
             <Spacer />
             <Input w={'35%'} borderColor='black' />
