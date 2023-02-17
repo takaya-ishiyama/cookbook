@@ -46,23 +46,18 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'app',
-    # 'djoser',
 ]
 
 
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',
-    #     # 'rest_framework.permissions.IsAdminUser'
-    # ],
 	'DEFAULT_AUTHENTICATION_CLASSES': [
 		'rest_framework_simplejwt.authentication.JWTAuthentication',        
 	],
 }
 
 SIMPLE_JWT = {
-    #トークンの時間を5分に設定
+    #トークンの時間を設定
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
