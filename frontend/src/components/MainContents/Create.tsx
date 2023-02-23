@@ -8,7 +8,6 @@ import {
   Flex,
   Input,
   Select,
-  Spacer,
   Spinner,
   Textarea,
   useToast,
@@ -29,11 +28,11 @@ const Create = () => {
     formState: { errors, isValid },
     control,
   } = useForm<CookBook>({
-    reValidateMode: 'onSubmit',
+    // reValidateMode: 'onBlur',
     defaultValues: { title: null },
   });
 
-  const watchField = watch(['title']);
+  const watchField = watch(['title', 'url', 'cookitem', 'memo']);
 
   //@ts-ignore
   const User: User = JSON.parse(localStorage.getItem('user'));
@@ -43,32 +42,19 @@ const Create = () => {
     name: 'cookitem',
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: CookBook) => {
+    console.log(data);
+    CookBookMutation.mutate({});
+  };
   const onError = (errors: any) => console.log(errors);
 
-  const CookBookMutation = useMutationPostItem(User.id, getValues().title, {
-    onSuccess: (data) => {
-      toast({
-        title: '登録成功',
-        description: 'レシピを登録しました',
-        status: 'success',
-        position: 'top',
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: 'エラー',
-        description: '登録に失敗しました',
-        status: 'error',
-        position: 'top',
-        duration: 3000,
-        isClosable: true,
-      });
-      console.log(error);
-    },
-  });
+  const CookBookMutation = useMutationPostItem(
+    User.id,
+    getValues().title,
+    getValues().url,
+    getValues().cookitem,
+    getValues().memo,
+  );
 
   const initial_control = useRef(0);
   useEffect(() => {
@@ -78,33 +64,28 @@ const Create = () => {
     }
   }, []);
 
-  const post_cookbook = () => {
-    const cookitems: CookItem[] = [];
-    //@ts-ignore
-    if (getValues().cookitem && getValues().cookitem[0].item != null) {
-      getValues().cookitem?.map((value) => {
-        let tmp_cookitem: CookItem = {
-          item: value.item,
-          quantity: value.quantity,
-          unit: value.unit,
-        };
-        cookitems.push(tmp_cookitem);
-      });
-    }
+  // const post_cookbook = () => {
+  //   // const cookitems: CookItem[] = [];
+  //   // //@ts-ignore
+  //   // if (getValues().cookitem && getValues().cookitem[0].item != null) {
+  //   //   getValues().cookitem?.map((value) => {
+  //   //     let tmp_cookitem: CookItem = {
+  //   //       item: value.item,
+  //   //       quantity: value.quantity,
+  //   //       unit: value.unit,
+  //   //     };
+  //   //     cookitems.push(tmp_cookitem);
+  //   //   });
+  //   // }
 
-    CookBookMutation.mutate({
-      url: getValues().url,
-      memo: getValues().memo,
-      cookitem: cookitems,
-    });
-  };
+  //   CookBookMutation.mutate({});
+  // };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Flex direction={'column'}>
-          <Flex direction={'row'} m={'10px'}>
-            <Spacer />
+          <Flex direction={'row'} m={'10px'} justifyContent={'center'}>
             <Flex direction={'column'} w={'40%'}>
               <Box flex={'1'}>タイトル</Box>
               <Input
@@ -114,11 +95,9 @@ const Create = () => {
                 {...register('title')}
               />
             </Flex>
-            <Spacer />
           </Flex>
 
-          <Flex direction={'row'} m={'10px'}>
-            <Spacer />
+          <Flex direction={'row'} m={'10px'} justifyContent={'center'}>
             <Flex direction={'column'} w={'40%'}>
               <Box flex={'1'}>URL</Box>
               <Input
@@ -128,11 +107,9 @@ const Create = () => {
                 {...register('url')}
               />
             </Flex>
-            <Spacer />
           </Flex>
 
-          <Flex direction={'row'}>
-            <Spacer />
+          <Flex direction={'row'} justifyContent={'center'}>
             <Flex direction={'column'}>
               <Box>材料</Box>
               {fields.map((field, index) => {
@@ -151,14 +128,18 @@ const Create = () => {
                         w={'6rem'}
                         textAlign={'right'}
                         borderColor={'black'}
-                        {...register(`cookitem.${index}.quantity`)}
+                        {...register(`cookitem.${index}.quantity`, {
+                          valueAsNumber: true,
+                        })}
                       />
                       <Select
                         m={'10px'}
                         w={'6rem'}
                         placeholder={' '}
                         borderColor={'black'}
-                        {...register(`cookitem.${index}.unit`)}
+                        {...register(`cookitem.${index}.unit`, {
+                          valueAsNumber: true,
+                        })}
                       >
                         {Unit_Master.map((value, index) => {
                           return (
@@ -198,25 +179,29 @@ const Create = () => {
                 );
               })}
             </Flex>
-            <Spacer />
           </Flex>
 
-          <Flex direction={'row'} m={'10px'}>
-            <Spacer />
+          <Flex direction={'row'} m={'10px'} justifyContent={'center'}>
             <Flex direction={'column'} w={'40%'}>
               <Box flex={'1'}>メモ</Box>
               <Textarea
                 resize={'none'}
                 borderColor={'black'}
                 flex={'1'}
-                {...register('url')}
+                {...register('memo')}
               />
             </Flex>
-            <Spacer />
           </Flex>
-          <Button type={'submit'} onClick={post_cookbook}>
-            追加
-          </Button>
+          <Flex direction={'row'} justifyContent={'center'}>
+            <Button
+              colorScheme={'blue'}
+              w={'100px'}
+              type={'submit'}
+              // onClick={post_cookbook}
+            >
+              追加
+            </Button>
+          </Flex>
         </Flex>
       </form>
     </>

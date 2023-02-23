@@ -26,7 +26,6 @@ const Home = () => {
 
   // @ts-ignore
   const cookbookdata = useQueryCookBook(user?.id);
-  console.log(cookbookdata.data);
 
   // レシピ一覧
   function cookbook(cookbook: CookBook) {
@@ -51,17 +50,14 @@ const Home = () => {
           {cookbook?.cookitem?.map((value) => {
             return (
               <>
-                <Flex m='5px' direction={'row'}>
-                  <Spacer />
+                <Flex m='5px' direction={'row'} justifyContent={'center'}>
                   <Box mx={'2rem'}>{value.item}</Box>
-                  <Spacer />
                   <Box mx={'2rem'}>
                     <>
                       {value.quantity}
                       {value.unit}
                     </>
                   </Box>
-                  <Spacer />
                 </Flex>
               </>
             );
@@ -83,8 +79,7 @@ const Home = () => {
     <>
       <form>
         <Flex direction={'column'}>
-          <Flex direction={'row'}>
-            <Spacer />
+          <Flex direction={'row'} justifyContent='center'>
             <Button
               w={'5rem'}
               mx={'10px'}
@@ -97,15 +92,17 @@ const Home = () => {
             <Button w={'5rem'} mx={'10px'} mt={'20px'} colorScheme={'blue'}>
               編集
             </Button>
-            <Spacer />
           </Flex>
-          <Flex direction={'row'} py={'20px'} mt={'10px'}>
-            <Spacer />
+          <Flex
+            direction={'row'}
+            py={'20px'}
+            mt={'10px'}
+            justifyContent='center'
+          >
             <Input w={'35%'} borderColor='black' />
             <Button mx={'10px'} colorScheme={'blue'}>
               検索
             </Button>
-            <Spacer />
           </Flex>
           {cookbookdata?.data?.map((list: CookBook) => {
             return <>{cookbook(list)}</>;
