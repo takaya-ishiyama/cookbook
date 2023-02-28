@@ -64,23 +64,6 @@ const Create = () => {
     }
   }, []);
 
-  // const post_cookbook = () => {
-  //   // const cookitems: CookItem[] = [];
-  //   // //@ts-ignore
-  //   // if (getValues().cookitem && getValues().cookitem[0].item != null) {
-  //   //   getValues().cookitem?.map((value) => {
-  //   //     let tmp_cookitem: CookItem = {
-  //   //       item: value.item,
-  //   //       quantity: value.quantity,
-  //   //       unit: value.unit,
-  //   //     };
-  //   //     cookitems.push(tmp_cookitem);
-  //   //   });
-  //   // }
-
-  //   CookBookMutation.mutate({});
-  // };
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit, onError)}>

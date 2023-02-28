@@ -23,8 +23,6 @@ class CookBookUpdateView(generics.UpdateAPIView):
     queryset=CookBook.objects.all()
 
 class CookBookCreateView(generics.CreateAPIView):
-    # serializer_class = CookBookPostSerializer
-    # queryset=CookBook.objects.all()
     queryset = CookBook.objects.all()
     
     def create(self, request, *args, **kwargs):
