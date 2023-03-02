@@ -35,6 +35,10 @@ const Home = () => {
     reset,
   } = useForm<CookBook>({});
 
+  const onSubmit = async (data: CookBook) => {
+    console.log(data);
+  };
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const user_json = localStorage.getItem('user');
@@ -42,6 +46,10 @@ const Home = () => {
       setUser(JSON.parse(user_json));
     }
   }, []);
+
+  // @ts-ignore
+  const cookbookdata = useQueryCookBook(user?.id, { enabled: !!user?.id });
+  const [edit_status, setEditStatus] = useState<boolean[]>([]);
 
   // useEffect(() => {
   //   reset({
@@ -52,88 +60,18 @@ const Home = () => {
   //   });
   // }, [cook_book_state]);
 
-  // @ts-ignore
-  const cookbookdata = useQueryCookBook(user?.id, { enabled: !!user?.id });
-
-  const [edit_status, setEditStatus] = useState<boolean[]>([]);
-
   useEffect(() => {
-    cookbookdata?.data?.map(() => {
-      setEditStatus((prevEditStatus) => [...prevEditStatus, false]);
-    });
-  }, [cookbookdata]);
-
-  // レシピ一覧
-  function cookbook(cookbook: CookBook, index: number) {
-    // const { register, reset } = CookBookHookForm({ cookbook });
-    return (
-      <>
-        <Button
-          onClick={() => {
-            const tmpEditStatus = [...edit_status];
-            tmpEditStatus[index] = !edit_status[index];
-            setEditStatus(tmpEditStatus);
-          }}
-        >
-          編集
-        </Button>
-        <fieldset disabled={!edit_status[index]}>
-          <Flex
-            direction={'column'}
-            m='20px'
-            bg={'#fdf5e6'}
-            mx='30px'
-            shadow={'xl'}
-            key={index}
-          >
-            <InputGroup border={'black'}>
-              <InputLeftAddon w={'6rem'} children='タイトル' />
-              <Input {...register('title')} />
-            </InputGroup>
-            <InputGroup border={'black'}>
-              <InputLeftAddon w={'6rem'} children='URL' />
-              <Input value={`${cookbook?.title}`} />
-            </InputGroup>
-            <InputGroup border={'black'}>
-              <InputLeftAddon w={'6rem'} children='材料' />
-              {cookbook?.cookitem?.map((value) => {
-                return (
-                  <>
-                    <Flex m='5px' direction={'row'} justifyContent={'center'}>
-                      <Box mx={'2rem'}>{value.item}</Box>
-                      <Box mx={'2rem'}>
-                        <>
-                          <Flex direction={'row'}>
-                            <Box mx={'5px'}>{value.quantity}</Box>
-                            <Box mx={'5px'}>
-                              {
-                                Unit_Master.find(
-                                  (data) => data.unit_number === value.unit,
-                                )?.unit_name
-                              }
-                            </Box>
-                          </Flex>
-                        </>
-                      </Box>
-                    </Flex>
-                  </>
-                );
-              })}
-            </InputGroup>
-            <InputGroup border={'black'}>
-              <InputLeftAddon w={'6rem'} children='メモ' />
-            </InputGroup>
-            <Textarea value={cookbook.memo ?? ''} borderColor={'black'} />
-          </Flex>
-        </fieldset>
-      </>
-    );
-  }
+    if (cookbookdata) {
+      cookbookdata?.data?.map(() => {
+        setEditStatus((prevEditStatus) => [...prevEditStatus, false]);
+      });
+    }
+  }, []);
 
   return (
     <>
       <styled.CommonTableStyled>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Flex direction={'column'}>
             <Flex direction={'row'} justifyContent='center'>
               <Button
@@ -160,15 +98,115 @@ const Home = () => {
                 検索
               </Button>
             </Flex>
-            {cookbookdata?.data?.map((list: CookBook, index: number) => {
-              // reset({
-              //   title: list.title ?? null,
-              //   url: list.url ?? null,
-              //   cookitem: list.cookitem ?? [],
-              //   memo: list.memo ?? null,
-              // });
-              return <>{cookbook(list, index)}</>;
-            })}
+
+            {cookbookdata?.data?.map((cookbook: CookBook, index: number) => (
+              <Box key={index}>
+                <Flex
+                  direction={'column'}
+                  m='20px'
+                  bg={'#fdf5e6'}
+                  mx='30px'
+                  shadow={'xl'}
+                  key={cookbook.id}
+                >
+                  {edit_status[index] ? (
+                    <>
+                      <Flex direction={'row'} justifyContent={'right'}>
+                        <Button
+                          colorScheme={'red'}
+                          onClick={() => {
+                            const tmpEditStatus = [...edit_status];
+                            tmpEditStatus[index] = !edit_status[index];
+                            setEditStatus(tmpEditStatus);
+                          }}
+                        >
+                          キャンセル
+                        </Button>
+                        <Button
+                          colorScheme={'green'}
+                          type={'submit'}
+                          onClick={() => {
+                            const tmpEditStatus = [...edit_status];
+                            tmpEditStatus[index] = !edit_status[index];
+                            setEditStatus(tmpEditStatus);
+                          }}
+                        >
+                          保存
+                        </Button>
+                      </Flex>
+                    </>
+                  ) : (
+                    <>
+                      <Flex justifyContent={'right'}>
+                        <Button
+                          colorScheme={'blue'}
+                          onClick={() => {
+                            const tmpEditStatus = [...edit_status];
+                            tmpEditStatus[index] = !edit_status[index];
+                            setEditStatus(tmpEditStatus);
+                          }}
+                        >
+                          編集
+                        </Button>
+                      </Flex>
+                    </>
+                  )}
+
+                  <fieldset disabled={!edit_status[index]}>
+                    <InputGroup border={'black'}>
+                      <InputLeftAddon w={'6rem'} children='タイトル' />
+                      <Input
+                        _disabled={{ color: 'black' }}
+                        {...register('title')}
+                      />
+                    </InputGroup>
+                    <Flex direction={'row'}></Flex>
+                    <InputGroup border={'black'}>
+                      <InputLeftAddon w={'6rem'} children='URL' />
+                      <Input
+                        _disabled={{ color: 'black' }}
+                        value={`${cookbook?.title}`}
+                      />
+                    </InputGroup>
+                    <InputGroup border={'black'}>
+                      <InputLeftAddon w={'6rem'} children='材料' />
+                      {cookbook?.cookitem?.map((value, index) => (
+                        <Flex
+                          m='5px'
+                          direction={'row'}
+                          justifyContent={'center'}
+                          key={index}
+                        >
+                          <Box mx={'2rem'}>{value.item}</Box>
+                          <Box mx={'2rem'}>
+                            <>
+                              <Flex direction={'row'}>
+                                <Box mx={'5px'}>{value.quantity}</Box>
+                                <Box mx={'5px'}>
+                                  {
+                                    Unit_Master.find(
+                                      (data) => data.unit_number === value.unit,
+                                    )?.unit_name
+                                  }
+                                </Box>
+                              </Flex>
+                            </>
+                          </Box>
+                        </Flex>
+                      ))}
+                    </InputGroup>
+                    <InputGroup border={'black'}>
+                      <InputLeftAddon w={'6rem'} children='メモ' />
+                    </InputGroup>
+                    <Textarea
+                      _disabled={{ color: 'black' }}
+                      value={cookbook.memo ?? ''}
+                      borderColor={'black'}
+                    />
+                  </fieldset>
+                </Flex>
+              </Box>
+            ))}
           </Flex>
         </form>
       </styled.CommonTableStyled>
