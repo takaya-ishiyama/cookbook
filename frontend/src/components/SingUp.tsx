@@ -34,9 +34,9 @@ const SingUp = () => {
   const toast = useToast();
   const router = useRouter();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log(e);
+  const handleSubmit = (data: any) => {
+    // e.preventDefault();
+    // console.log(e);
   };
 
   const getuser = async (username: string, password: string) => {

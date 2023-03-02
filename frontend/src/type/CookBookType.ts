@@ -54,6 +54,7 @@ export type CookBooks = {
 
 export type CookBook = {
   id?: number;
+  user_id?: number;
   title?: string | null;
   url?: string | null;
   memo?: string | null;
