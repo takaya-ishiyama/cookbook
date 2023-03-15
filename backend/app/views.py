@@ -1,11 +1,12 @@
 from .models import CookBook, CookItem
-from .serializers import CookBookSerializer, CookBookPostSerializer, CookItemSerializer
+from .serializers import CookBookSerializer, CookBookPostSerializer, CookItemSerializer, CookBookPutSerializer
 from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from django.db.models import Q
 from rest_framework import views, status
 from rest_framework.response import Response
 import json
+from django.http import JsonResponse
 
 class CookBookListView(generics.ListAPIView):
     serializer_class = CookBookSerializer
@@ -19,8 +20,29 @@ class CookBookListView(generics.ListAPIView):
         return queryset_list
 
 class CookBookUpdateView(generics.UpdateAPIView):
-    serializer_class = CookBookSerializer
-    queryset=CookBook.objects.all()
+    queryset = CookBook.objects.all()
+    lookup_field = 'cookbook_id'
+    serializer_class = CookBookPutSerializer
+
+    # def get_object(self, request):
+    #     data = request.data
+    #     print(data)
+    #     cookbook_id = self.kwargs.get('cookbook_id')
+    #     obj = CookBook.objects.get(cookbook_id=cookbook_id)
+    #     return obj
+
+    # def perform_update(self, serializer):
+    #     cookitem_data = self.request.data.pop('cookitem', None)
+    #     instance = serializer.save()
+    #     if cookitem_data:
+    #         instance.cookitem.all().delete()
+    #         for data in cookitem_data:
+    #             CookItem.objects.create(
+    #                 item=data.get('item'),
+    #                 quantity=data.get('quantity'),
+    #                 unit=data.get('unit'),
+    #                 cookbook=instance
+    #             )
 
 class CookBookCreateView(generics.CreateAPIView):
     queryset = CookBook.objects.all()

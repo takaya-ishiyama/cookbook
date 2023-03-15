@@ -16,10 +16,10 @@ export default function CookBookHookForm({ cookbook }: { cookbook: CookBook }) {
 
   useEffect(() => {
     reset({
-      title: cookbook.title ?? null,
-      url: cookbook.url ?? null,
+      title: cookbook.title ?? '',
+      url: cookbook.url ?? '',
       cookitem: cookbook.cookitem ?? [],
-      memo: cookbook.memo ?? null,
+      memo: cookbook.memo ?? '',
     });
   }, []);
   return {

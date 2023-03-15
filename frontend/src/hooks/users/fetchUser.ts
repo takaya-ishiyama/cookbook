@@ -52,10 +52,10 @@ export const GetUser = async (
   if (resp.ok) {
     const tokenData = await resp.json();
     setCookie(null, 'accessToken', tokenData.access, {
-      maxAge: 30 * 60 /*30min X 60second*/,
+      maxAge: 60 * 60 * 60 /*30min X 60second*/,
     });
     setCookie(null, 'refreshToken', tokenData.refresh, {
-      maxAge: 24 * 60 * 60 /* 24h X 60min X 60second*/,
+      maxAge: 24 * 60 * 60 * 60 /* 24h X 60min X 60second*/,
     });
     const user = await fetchUser();
     return user;

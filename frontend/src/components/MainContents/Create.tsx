@@ -29,7 +29,7 @@ const Create = () => {
     control,
   } = useForm<CookBook>({
     // reValidateMode: 'onBlur',
-    defaultValues: { title: null },
+    defaultValues: { title: '' },
   });
 
   const watchField = watch(['title', 'url', 'cookitem', 'memo']);
@@ -59,7 +59,7 @@ const Create = () => {
   const initial_control = useRef(0);
   useEffect(() => {
     if (initial_control.current === 0) {
-      append({ item: null, quantity: null, unit: null });
+      append({ item: '', quantity: null, unit: null });
       initial_control.current = 1;
     }
   }, []);

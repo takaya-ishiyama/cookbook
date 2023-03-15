@@ -44,7 +44,17 @@ class CookBookTests(TestCase):
         cookbook = CookBook.objects.get(pk=self.response.data['cookbook_id'])
         serializer = CookBookSerializer(cookbook)
         self.assertEqual(self.response.data, serializer.data)
-        
+    
+    def test_update_cookbook(self):
+        response = self.client.put(
+            reverse('cookbook_update', kwargs={'pk': self.cookbook.pk}),
+            self.updated_cookbook_data,
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_cookbook = CookBook.objects.get(pk=self.cookbook.pk)
+        serializer = CookBookPostSerializer(updated_cookbook)
+        self.assertEqual(response.data, serializer.data)
 
 class CookItemTests(TestCase):
     def setUp(self):

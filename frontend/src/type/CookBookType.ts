@@ -44,20 +44,20 @@ export type CookItem = {
 };
 
 export type CookBooks = {
-  id?: number;
-  title?: string | null;
-  url?: string | null;
-  memo?: string | null;
+  cookbook_id?: number;
+  title?: string;
+  url?: string;
+  memo?: string;
   user?: any;
   cookitem?: CookItems;
 }[];
 
 export type CookBook = {
-  id?: number;
+  cookbook_id?: number;
   user_id?: number;
-  title?: string | null;
-  url?: string | null;
-  memo?: string | null;
+  title?: string;
+  url?: string;
+  memo?: string;
   user?: User;
   cookitem?: CookItems;
 };
