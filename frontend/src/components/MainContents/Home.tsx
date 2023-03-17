@@ -1,6 +1,6 @@
 import useMutationPutItem from '@/src/hooks/cookbook/useMutionPutItem';
 import useQueryCookBook from '@/src/hooks/cookbook/useQueryCookBook';
-import { CookBook, Unit_Master } from '@/src/type/CookBookType';
+import { CookBook, CookItem, Unit_Master } from '@/src/type/CookBookType';
 import { User } from '@/src/type/UserType';
 import {
   Box,
@@ -35,13 +35,6 @@ const Home = () => {
     reset,
   } = useForm();
 
-  // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-  //   {
-  //     control,
-  //     name: 'cookitem',
-  //   },
-  // );
-
   const onSubmit = (data: CookBook) => {
     console.log(data);
   };
@@ -69,13 +62,12 @@ const Home = () => {
   }, []);
 
   const usemutation_put_itme = useMutationPutItem({
-    // cookbook_id: 60,
     user_id: user?.id,
   });
 
   return (
     <>
-      <styled.CommonTableStyled>
+      <styled.CommonStyled>
         <Flex direction={'column'}>
           <Flex direction={'row'} justifyContent='center'>
             <Button
@@ -130,11 +122,34 @@ const Home = () => {
                           const tmpEditStatus = [...edit_status];
                           tmpEditStatus[index] = !edit_status[index];
                           setEditStatus(tmpEditStatus);
+                          const cookitem_array: CookItem[] = [];
+                          cookbook.cookitem?.map((v, index) => {
+                            console.log(
+                              'kore',
+                              getValues(
+                                `cookitem${cookbook.cookbook_id}.item${index}`,
+                              ),
+                            );
+                            cookitem_array.push({
+                              item: getValues(
+                                `cookitem${cookbook.cookbook_id}.item${index}`,
+                              ),
+                              quantity: getValues(
+                                `cookiook${cookbook.cookbook_id}.quantity${index}`,
+                              ),
+                              unit: getValues(
+                                `cookitem${cookbook.cookbook_id}.unit${index}`,
+                              ),
+                            });
+                          });
+
+                          console.log('kore', getValues().cookitem);
                           usemutation_put_itme.mutate({
                             cookbook_id: cookbook.cookbook_id,
                             title: getValues(`title${cookbook.cookbook_id}`),
                             url: getValues(`url${cookbook.cookbook_id}`),
                             memo: getValues(`memo${cookbook.cookbook_id}`),
+                            cookitem: cookitem_array,
                           });
                         }}
                       >
@@ -156,96 +171,93 @@ const Home = () => {
                     </Flex>
                   )}
                   <fieldset disabled={!edit_status[index]}>
-                    <InputGroup border={'black'}>
-                      <InputLeftAddon w={'6rem'} children='タイトル' />
+                    <Flex direction={'row'} my={'3px'}>
+                      <styled.CookBookHeader>タイトル</styled.CookBookHeader>
                       <Input
+                        w={'85%'}
                         id={`title_input_${index}`}
                         _disabled={{ color: 'black' }}
                         defaultValue={cookbook.title ?? ''}
                         {...register(`title${cookbook.cookbook_id}`)}
                       />
-                    </InputGroup>
-                    <Flex direction={'row'}></Flex>
-                    <InputGroup border={'black'}>
-                      <InputLeftAddon w={'6rem'} children='URL' />
+                    </Flex>
+                    <Flex direction={'row'} my={'3px'}>
+                      <styled.CookBookHeader>URL</styled.CookBookHeader>
                       <Input
+                        w={'85%'}
                         id={`URL_input_${index}`}
                         _disabled={{ color: 'black' }}
                         defaultValue={cookbook.url ?? ''}
                         {...register(`url${cookbook.cookbook_id}`)}
                       />
-                    </InputGroup>
-                    <InputGroup border={'black'}>
-                      <InputLeftAddon w={'6rem'} children='材料' />
-                      {cookbook?.cookitem?.map((value, index) => (
-                        <Flex
-                          m='5px'
-                          direction={'row'}
-                          justifyContent={'center'}
-                          key={`cookitme${index}`}
-                        >
-                          <Input
-                            ml={'5px'}
-                            defaultValue={value.item?.toString()}
-                            {...register(
-                              `cookbook${cookbook.cookbook_id}.item${index}`,
-                            )}
-                            borderColor={'black'}
-                            _disabled={{ color: 'black' }}
-                          />
-                          <Box>
-                            <Flex direction={'row'}>
-                              <Input
-                                mx={'5px'}
-                                defaultValue={Number(value.quantity)}
-                                {...register(
-                                  `cookbook${cookbook.cookbook_id}.quantity${index}`,
-                                )}
-                                borderColor={'black'}
-                                _disabled={{ color: 'black' }}
-                              />
-                              <Select
-                                w={'16rem'}
-                                borderColor={'black'}
-                                placeholder={' '}
-                                _disabled={{ color: 'black' }}
-                                defaultValue={Number(value.unit)}
-                                {...register(
-                                  `cookbook${cookbook.cookbook_id}.unit${index}`,
-                                )}
-                              >
-                                {Unit_Master.map((data, index) => (
-                                  <option
-                                    key={`UnitMaster${index}`}
-                                    value={Number(data.unit_number)}
-                                    color={'black'}
-                                  >
-                                    {data.unit_name}
-                                  </option>
-                                ))}
-                              </Select>
-                            </Flex>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </InputGroup>
-                    <InputGroup border={'black'}>
-                      <InputLeftAddon w={'6rem'} children='メモ' />
-                    </InputGroup>
-                    <Textarea
-                      id={`memo_input_${index}`}
-                      _disabled={{ color: 'black' }}
-                      defaultValue={cookbook.memo ?? ''}
-                      {...register(`memo${cookbook.cookbook_id}`)}
-                      borderColor={'black'}
-                    />
+                    </Flex>
+                    <Flex direction={'row'}>
+                      <styled.CookBookHeader>材料</styled.CookBookHeader>
+                      <Flex direction={'column'} w={'85%'}>
+                        {cookbook?.cookitem?.map((value, index) => (
+                          <Flex
+                            direction={'row'}
+                            key={`cookitme${index}`}
+                            my={'3px'}
+                          >
+                            <Input
+                              defaultValue={value.item?.toString()}
+                              {...register(
+                                `cookitem${cookbook.cookbook_id}.item${index}`,
+                              )}
+                              _disabled={{ color: 'black' }}
+                            />
+                            <Input
+                              mx={'4px'}
+                              defaultValue={Number(value.quantity)}
+                              textAlign={'right'}
+                              {...register(
+                                `cookitem${cookbook.cookbook_id}.quantity${index}`,
+                              )}
+                              _disabled={{ color: 'black' }}
+                            />
+                            <Select
+                              fontSize={'12px'}
+                              borderColor={'black'}
+                              placeholder={' '}
+                              _disabled={{ color: 'black' }}
+                              defaultValue={Number(value.unit)}
+                              {...register(
+                                `cookitem${cookbook.cookbook_id}.unit${index}`,
+                              )}
+                            >
+                              {Unit_Master.map((data, index) => (
+                                <option
+                                  key={`UnitMaster${index}`}
+                                  value={Number(data.unit_number)}
+                                  color={'black'}
+                                >
+                                  {data.unit_name}
+                                </option>
+                              ))}
+                            </Select>
+                          </Flex>
+                        ))}
+                      </Flex>
+                    </Flex>
+                    <Flex direction={'column'} my={'3px'}>
+                      <styled.CookBookHeader>メモ</styled.CookBookHeader>
+                      <Textarea
+                        borderInline={{ color: 'black' }}
+                        id={`memo_input_${index}`}
+                        _disabled={{ color: 'black' }}
+                        defaultValue={cookbook.memo ?? ''}
+                        {...register(`memo${cookbook.cookbook_id}`)}
+                        borderColor={'black'}
+                      />
+                    </Flex>
                   </fieldset>
                 </Flex>
               </Box>
             ))}
           </form>
         </Flex>
-      </styled.CommonTableStyled>
+      </styled.CommonStyled>
     </>
   );
 };

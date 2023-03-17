@@ -2,7 +2,7 @@ import { Box, InputGroup } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 // 共通のスタイル
-export const CommonTableStyled = styled(Box)`
+export const CommonStyled = styled(Box)`
   input,
   div {
     fontsize: 14px;
@@ -10,6 +10,15 @@ export const CommonTableStyled = styled(Box)`
   button {
     width: 100px;
   }
+  input {
+    border-color: black;
+  }
+`;
 
-  //   background-color: ${(props) => (props.disabled ? 'gray' : 'blue')};
+export const CookBookHeader = styled(Box)`
+  width: 6rem;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  background-color: #afeeee;
 `;

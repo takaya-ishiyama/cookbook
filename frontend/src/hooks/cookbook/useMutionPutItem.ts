@@ -31,7 +31,7 @@ const useMutationPutItem = ({
           user_id: user_id,
           title: params.title,
           url: params.url,
-          cookitem: params.cookitem,
+          cookitem: params.cookitem ?? [],
           memo: params.memo,
         },
       );
