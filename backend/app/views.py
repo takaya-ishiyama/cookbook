@@ -23,26 +23,24 @@ class CookBookUpdateView(generics.UpdateAPIView):
     queryset = CookBook.objects.all()
     lookup_field = 'cookbook_id'
     serializer_class = CookBookPutSerializer
+    
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        
+        cookbook = CookBook.objects.get(cookbook_id=data.get('cookbook_id'))
+        cookbook.title = data.get('title')
+        cookbook.url = data.get('url')
+        cookbook.memo = data.get('memo')
+        cookbook.user_id = data.get('user_id')
 
-    # def get_object(self, request):
-    #     data = request.data
-    #     print(data)
-    #     cookbook_id = self.kwargs.get('cookbook_id')
-    #     obj = CookBook.objects.get(cookbook_id=cookbook_id)
-    #     return obj
-
-    # def perform_update(self, serializer):
-    #     cookitem_data = self.request.data.pop('cookitem', None)
-    #     instance = serializer.save()
-    #     if cookitem_data:
-    #         instance.cookitem.all().delete()
-    #         for data in cookitem_data:
-    #             CookItem.objects.create(
-    #                 item=data.get('item'),
-    #                 quantity=data.get('quantity'),
-    #                 unit=data.get('unit'),
-    #                 cookbook=instance
-    #             )
+        # cookitem の処理
+        cookitem_data = data.get('cookitem')
+        for item_data in cookitem_data:
+            cookbook.cookitem.item = item_data.get('item')
+            cookbook.cookitem.quantity = item_data.get('quantity')
+            cookbook.cookitem.unit = item_data.get('unit')
+        cookbook.save()
+        return Response(CookBookSerializer(cookbook).data, status=status.HTTP_201_CREATED)    
 
 class CookBookCreateView(generics.CreateAPIView):
     queryset = CookBook.objects.all()

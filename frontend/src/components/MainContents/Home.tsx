@@ -124,12 +124,6 @@ const Home = () => {
                           setEditStatus(tmpEditStatus);
                           const cookitem_array: CookItem[] = [];
                           cookbook.cookitem?.map((v, index) => {
-                            console.log(
-                              'kore',
-                              getValues(
-                                `cookitem${cookbook.cookbook_id}.item${index}`,
-                              ),
-                            );
                             cookitem_array.push({
                               item: getValues(
                                 `cookitem${cookbook.cookbook_id}.item${index}`,
@@ -143,7 +137,6 @@ const Home = () => {
                             });
                           });
 
-                          console.log('kore', getValues().cookitem);
                           usemutation_put_itme.mutate({
                             cookbook_id: cookbook.cookbook_id,
                             title: getValues(`title${cookbook.cookbook_id}`),
