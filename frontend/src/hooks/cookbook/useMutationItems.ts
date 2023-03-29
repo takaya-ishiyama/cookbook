@@ -13,11 +13,11 @@ import {
 const base_url = 'http://localhost:8000/app/api/cookbook/';
 
 const useMutationPostItem = (
-  user_id: number | undefined,
-  title: string | null | undefined,
-  url: string | null | undefined,
-  cookitem: CookItems | null | undefined,
-  memo: string | null | undefined,
+  user_id: number,
+  title: string | null,
+  url: string | null,
+  cookitem: CookItems | null,
+  memo: string | null,
 ): UseMutationResult<CookBook, AxiosError, CookBook, undefined> => {
   const toast = useToast();
   const router = useRouter();

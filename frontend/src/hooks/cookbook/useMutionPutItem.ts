@@ -17,7 +17,7 @@ const useMutationPutItem = ({
   user_id,
   option,
 }: {
-  user_id: number | undefined;
+  user_id: number;
   option?: UseQueryOptions;
 }): UseMutationResult<CookBook, AxiosError, CookBook, undefined> => {
   const toast = useToast();
@@ -47,7 +47,7 @@ const useMutationPutItem = ({
           duration: 3000,
           isClosable: true,
         });
-        router.reload();
+        // router.reload();
       },
       onError: (error) => {
         toast({

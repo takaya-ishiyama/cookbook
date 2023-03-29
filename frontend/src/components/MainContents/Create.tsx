@@ -49,6 +49,7 @@ const Create = () => {
   const onError = (errors: any) => console.log(errors);
 
   const CookBookMutation = useMutationPostItem(
+    //@ts-ignore
     User.id,
     getValues().title,
     getValues().url,

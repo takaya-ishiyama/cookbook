@@ -15,15 +15,6 @@ import LoginOrSingup from '@/src/components/LoginOrSingUp';
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  // const [user, setUser] = useState<User>();
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const user_json = localStorage.getItem('user');
-  //     // @ts-ignore
-  //     setUser(JSON.parse(user_json));
-  //   }
-  // }, []);
-
   /** 表示制御用コンポーネント */
   function DisplayController({
     unauthorize,
@@ -45,7 +36,6 @@ export default function App({ Component, pageProps }: AppProps) {
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
       } else {
-        // router.push(`login`);
         console.log('faild');
       }
     };

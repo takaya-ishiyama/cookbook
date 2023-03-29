@@ -21,8 +21,8 @@ class CookBookListView(generics.ListAPIView):
 
 class CookBookUpdateView(generics.UpdateAPIView):
     queryset = CookBook.objects.all()
-    lookup_field = 'cookbook_id'
-    serializer_class = CookBookPutSerializer
+    # lookup_field = 'cookbook_id'
+    # serializer_class = CookBookPutSerializer
     
     def update(self, request, *args, **kwargs):
         data = request.data
@@ -31,16 +31,20 @@ class CookBookUpdateView(generics.UpdateAPIView):
         cookbook.title = data.get('title')
         cookbook.url = data.get('url')
         cookbook.memo = data.get('memo')
-        cookbook.user_id = data.get('user_id')
+        # cookbook.user_id = data.get('user_id')
 
         # cookitem の処理
+        CookItem.objects.filter(cookbook_id=cookbook.cookbook_id).delete()
         cookitem_data = data.get('cookitem')
         for item_data in cookitem_data:
-            cookbook.cookitem.item = item_data.get('item')
-            cookbook.cookitem.quantity = item_data.get('quantity')
-            cookbook.cookitem.unit = item_data.get('unit')
+            CookItem.objects.create(
+                cookbook=cookbook,
+                item=item_data.get('item'),
+                quantity=item_data.get('quantity'),
+                unit=item_data.get('unit')
+            )
         cookbook.save()
-        return Response(CookBookSerializer(cookbook).data, status=status.HTTP_201_CREATED)    
+        return Response(CookBookSerializer(cookbook).data, status=status.HTTP_200_OK)    
 
 class CookBookCreateView(generics.CreateAPIView):
     queryset = CookBook.objects.all()
