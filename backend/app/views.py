@@ -1,10 +1,12 @@
 from .models import CookBook, CookItem
-from .serializers import CookBookSerializer, CookBookPostSerializer
+from .serializers import CookBookSerializer, CookBookPostSerializer, CookItemSerializer, CookBookPutSerializer
 from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from django.db.models import Q
 from rest_framework import views, status
 from rest_framework.response import Response
+import json
+from django.http import JsonResponse
 
 class CookBookListView(generics.ListAPIView):
     serializer_class = CookBookSerializer
@@ -18,10 +20,55 @@ class CookBookListView(generics.ListAPIView):
         return queryset_list
 
 class CookBookUpdateView(generics.UpdateAPIView):
-    serializer_class = CookBookSerializer
-    queryset=CookBook.objects.all()
+    queryset = CookBook.objects.all()
+    # lookup_field = 'cookbook_id'
+    # serializer_class = CookBookPutSerializer
+    
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        
+        cookbook = CookBook.objects.get(cookbook_id=data.get('cookbook_id'))
+        cookbook.title = data.get('title')
+        cookbook.url = data.get('url')
+        cookbook.memo = data.get('memo')
+        # cookbook.user_id = data.get('user_id')
+
+        # cookitem の処理
+        CookItem.objects.filter(cookbook_id=cookbook.cookbook_id).delete()
+        cookitem_data = data.get('cookitem')
+        for item_data in cookitem_data:
+            CookItem.objects.create(
+                cookbook=cookbook,
+                item=item_data.get('item'),
+                quantity=item_data.get('quantity'),
+                unit=item_data.get('unit')
+            )
+        cookbook.save()
+        return Response(CookBookSerializer(cookbook).data, status=status.HTTP_200_OK)    
 
 class CookBookCreateView(generics.CreateAPIView):
-    serializer_class = CookBookPostSerializer
-    queryset=CookBook.objects.all()
+    queryset = CookBook.objects.all()
+    
+    def create(self, request, *args, **kwargs):
+        # JSON 形式のリクエストの内容を取得
+        data = request.data
 
+        # CookBook インスタンスを作成
+        cookbook = CookBook.objects.create(
+            user_id=data.get('user_id'),
+            title=data.get('title'),
+            url=data.get('url'),
+            memo=data.get('memo')
+        )
+
+        # cookitem の処理
+        cookitem_data = data.get('cookitem')
+        for item_data in cookitem_data:
+            cookbook.cookitem.create(
+                item=item_data.get('item'),
+                quantity=item_data.get('quantity'),
+                unit=item_data.get('unit')
+            )
+
+        return Response(CookBookSerializer(cookbook).data, status=status.HTTP_201_CREATED)    
+    

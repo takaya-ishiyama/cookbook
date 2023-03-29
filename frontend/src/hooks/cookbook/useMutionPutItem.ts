@@ -8,46 +8,51 @@ import {
   useMutation,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
 } from 'react-query';
 
-const base_url = 'http://localhost:8000/app/api/cookbook/';
+const base_url = 'http://localhost:8000/app/api/cookbook';
 
-const useMutationPostItem = (
-  user_id: number,
-  title: string | null,
-  url: string | null,
-  cookitem: CookItems | null,
-  memo: string | null,
-): UseMutationResult<CookBook, AxiosError, CookBook, undefined> => {
+const useMutationPutItem = ({
+  user_id,
+  option,
+}: {
+  user_id: number;
+  option?: UseQueryOptions;
+}): UseMutationResult<CookBook, AxiosError, CookBook, undefined> => {
   const toast = useToast();
   const router = useRouter();
   return useMutation(
-    async (): Promise<CookBook> => {
-      const { data } = await axios.post<CookBook>(`${base_url}create/`, {
-        user_id,
-        title,
-        url,
-        cookitem,
-        memo,
-      });
+    async (params: CookBook): Promise<CookBook> => {
+      const { data } = await axios.put<CookBook>(
+        `${base_url}/update/${params.cookbook_id}/`,
+        {
+          cookbook_id: params.cookbook_id,
+          user_id: user_id,
+          title: params.title,
+          url: params.url,
+          cookitem: params.cookitem ?? [],
+          memo: params.memo,
+        },
+      );
       return data;
     },
     {
       onSuccess: (data) => {
         toast({
-          title: '登録成功',
-          description: 'レシピを登録しました',
+          title: '更新成功',
+          description: 'レシピを更新しました',
           status: 'success',
           position: 'top',
           duration: 3000,
           isClosable: true,
         });
-        router.push('/contents');
+        // router.reload();
       },
       onError: (error) => {
         toast({
           title: 'エラー',
-          description: '登録に失敗しました',
+          description: '更新を失敗しました',
           status: 'error',
           position: 'top',
           duration: 3000,
@@ -58,4 +63,4 @@ const useMutationPostItem = (
     },
   );
 };
-export default useMutationPostItem;
+export default useMutationPutItem;
