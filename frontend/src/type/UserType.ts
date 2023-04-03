@@ -11,9 +11,9 @@ export type Users = {
 
 export type User = {
   id?: number;
-  username: string;
+  username?: string;
   email?: string;
-  password: string;
+  password?: string;
   icon?: any;
   birth?: Date;
   sex?: number;

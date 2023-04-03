@@ -6,7 +6,12 @@ const base_url = 'http://localhost:8000/app/api';
 
 const useQueryCookBook = (
   user: number,
-  options?: UseQueryOptions<unknown, AxiosError, CookBooks>,
+  options?: UseQueryOptions<
+    unknown,
+    AxiosError<unknown, any>,
+    CookBooks,
+    (string | number)[]
+  >,
 ): UseQueryResult<CookBooks, AxiosError> => {
   return useQuery(
     ['cookbook', user],
@@ -16,7 +21,6 @@ const useQueryCookBook = (
       });
       return data;
     },
-    //@ts-ignore
     options,
   );
 };

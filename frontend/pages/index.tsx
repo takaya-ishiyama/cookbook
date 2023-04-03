@@ -1,11 +1,9 @@
-import { Top } from "../src/components/Top";
-
+import { Top } from '../src/components/Top';
 
 export default function Home() {
-
   return (
     <>
       <Top />
     </>
-  )
+  );
 }

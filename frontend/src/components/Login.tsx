@@ -1,7 +1,8 @@
+import { UserContext } from '@/pages/_app';
 import { GetUser } from '@/src/hooks/users/fetchUser';
 import { Box, Button, Flex, Input, Spacer, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type User = {
@@ -28,6 +29,7 @@ const Login = () => {
   const onSubmit = (data: any, e: any) => console.log(data, e);
   const onError = (errors: any, e: any) => console.log(errors, e);
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
 
   const toast = useToast();
   const getuser = async () => {
@@ -35,9 +37,10 @@ const Login = () => {
     const user: User = await resp?.json();
     if (user) {
       console.log('sucsess');
-      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
       router.push(`contents`);
     } else {
+      setUser(null);
       toast({
         title: 'login faild',
         status: 'error',
