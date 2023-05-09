@@ -1,5 +1,5 @@
-import Login from '@/src/components/Login';
-import SingUp from '@/src/components/SingUp';
+import Login from '@/src/feature/Login';
+import SingUp from '@/src/feature/SingUp';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';

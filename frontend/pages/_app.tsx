@@ -1,13 +1,13 @@
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
-import HeaderComponent from '@/src/components/HeaderComponent';
+import HeaderComponent from '@/src/feature/HeaderComponent';
 import { createContext, Dispatch, SetStateAction, useState } from 'react';
 import { User } from '@/src/type/UserType';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
 import { UseTokenGetUser } from '@/src/hooks/users/fetchUser';
-import LoginOrSingup from '@/src/components/LoginOrSingUp';
+import LoginOrSingup from '@/src/feature/LoginOrSingUp';
 
 const queryClient = new QueryClient();
 

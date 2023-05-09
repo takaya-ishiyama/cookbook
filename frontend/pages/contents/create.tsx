@@ -1,4 +1,4 @@
-import Create from '@/src/components/MainContents/Create';
+import Create from '@/src/feature/MainContents/Create';
 import React from 'react';
 
 const create = () => {
