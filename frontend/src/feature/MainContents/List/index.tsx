@@ -5,7 +5,6 @@ import {
   CookBook,
   CookBooks,
   CookItem,
-  CookItems,
   Unit_Master,
 } from '@/src/type/CookBookType';
 import { User } from '@/src/type/UserType';
@@ -14,7 +13,7 @@ import { Box, Button, Flex, Input, Select, Textarea } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as styled from './styles';
+import * as styled from '../styles';
 
 const Home = () => {
   const router = useRouter();
@@ -80,8 +79,6 @@ const Home = () => {
     setCookBooks(updateCookBooks);
   };
   const removeCookItem = (index: number, cookitem_index: number) => {
-    // cookbook?.cookitem.splice(index);
-    // console.log(cookitem_index);
     const updateCookBooks = [...cookbooks];
     updateCookBooks[index].cookitem?.splice(cookitem_index, 1);
     setCookBooks(updateCookBooks);
@@ -97,10 +94,10 @@ const Home = () => {
         <Flex direction={'column'}>
           <Flex direction={'row'} justifyContent='center'>
             <Button
-              w={'5rem'}
+              w={'100px'}
               mx={'10px'}
               mt={'20px'}
-              colorScheme={'blue'}
+              colorScheme='blue'
               onClick={() => router.push('/contents/create')}
             >
               追加
