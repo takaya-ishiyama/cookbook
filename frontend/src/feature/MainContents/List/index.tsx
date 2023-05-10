@@ -1,35 +1,22 @@
+import { UserContext } from '@/pages/_app';
 import useMutationPutItem from '@/src/hooks/cookbook/useMutionPutItem';
 import useQueryCookBook from '@/src/hooks/cookbook/useQueryCookBook';
 import {
   CookBook,
   CookBooks,
   CookItem,
-  CookItems,
   Unit_Master,
 } from '@/src/type/CookBookType';
 import { User } from '@/src/type/UserType';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Select,
-  Spacer,
-  Spinner,
-  Textarea,
-} from '@chakra-ui/react';
-import router, { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
-import CookBookHookForm from './feature/useFormOfCookBook';
-import * as styled from './styles';
+import { Box, Button, Flex, Input, Select, Textarea } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as styled from '../styles';
 
 const Home = () => {
   const router = useRouter();
-  const [user, setUser] = useState<User>();
 
   const {
     register,
@@ -48,40 +35,58 @@ const Home = () => {
 
   const onError = (errors: any) => console.log(errors);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const user_json = localStorage.getItem('user');
-      // @ts-ignore
-      setUser(JSON.parse(user_json));
-    }
-  }, []);
+  const { user, setUser } = useContext(UserContext);
 
-  // @ts-ignore
-  const cookbookdata = useQueryCookBook(user?.id, { enabled: !!user?.id });
   const [edit_status, setEditStatus] = useState<boolean[]>([]);
+  const [cookbooks, setCookBooks] = useState<CookBooks>([]);
+  const { data: cookbookdata, isLoading: cookbookIsLoading } = useQueryCookBook(
+    // @ts-ignore
+    user?.id,
+    {
+      enabled: !!user?.id,
+      onSuccess: (data) => {
+        console.log(data);
+        setCookBooks(data);
+      },
+      onError: (e) => {
+        console.log(e);
+      },
+    },
+  );
 
   useEffect(() => {
     if (cookbookdata) {
-      cookbookdata?.data?.map(() => {
+      cookbookdata?.map((cookbook) => {
         setEditStatus((prevEditStatus) => [...prevEditStatus, false]);
+        //@ts-ignore
+        // setCookItems([...cookitems, cookbook.cookitem]);
       });
     }
-  }, [cookbookdata]);
+  }, []);
 
   const usemutation_put_itme = useMutationPutItem({
     //@ts-ignore
     user_id: user?.id,
   });
 
-  const addCookItem = (cookbook: CookBook) => {
-    cookbook.cookitem?.push({
+  const addCookItem = (cookbook: CookBook, index: number) => {
+    const updateCookBooks = [...cookbooks];
+    updateCookBooks[index].cookitem?.push({
       item: '',
       quantity: null,
       unit: null,
     });
-    console.log(cookbook.cookitem);
+    setCookBooks(updateCookBooks);
   };
-  const removeCookItem = () => {};
+  const removeCookItem = (index: number, cookitem_index: number) => {
+    const updateCookBooks = [...cookbooks];
+    updateCookBooks[index].cookitem?.splice(cookitem_index, 1);
+    setCookBooks(updateCookBooks);
+  };
+
+  if (cookbookIsLoading) {
+    return <Box>Loading</Box>;
+  }
 
   return (
     <>
@@ -89,10 +94,10 @@ const Home = () => {
         <Flex direction={'column'}>
           <Flex direction={'row'} justifyContent='center'>
             <Button
-              w={'5rem'}
+              w={'100px'}
               mx={'10px'}
               mt={'20px'}
-              colorScheme={'blue'}
+              colorScheme='blue'
               onClick={() => router.push('/contents/create')}
             >
               追加
@@ -110,9 +115,9 @@ const Home = () => {
             </Button>
           </Flex>
           <form onSubmit={handleSubmit(onSubmit, onError)}>
-            {cookbookdata?.data?.map((cookbook: CookBook, index: number) => {
+            {cookbooks?.map((cookbook: CookBook, index: number) => {
               return (
-                <Box key={index}>
+                <Box key={`cookbook${index}`}>
                   <Flex
                     direction={'column'}
                     m='20px'
@@ -145,13 +150,13 @@ const Home = () => {
                             cookbook.cookitem?.map((v, index) => {
                               cookitem_array.push({
                                 item: getValues(
-                                  `cookitem${cookbook.cookbook_id}.item${index}`,
+                                  `cookitem.${cookbook.cookbook_id}.item${index}`,
                                 ),
                                 quantity: getValues(
-                                  `cookitem${cookbook.cookbook_id}.quantity${index}`,
+                                  `cookitem.${cookbook.cookbook_id}.quantity${index}`,
                                 ),
                                 unit: getValues(
-                                  `cookitem${cookbook.cookbook_id}.unit${index}`,
+                                  `cookitem.${cookbook.cookbook_id}.unit${index}`,
                                 ),
                               });
                             });
@@ -206,17 +211,17 @@ const Home = () => {
                       <Flex direction={'row'}>
                         <styled.CookBookHeader>材料</styled.CookBookHeader>
                         <Flex direction={'column'} w={'85%'}>
-                          {cookbook?.cookitem?.map((value, index) => {
+                          {cookbook?.cookitem?.map((value, cookitem_index) => {
                             return (
                               <Flex
                                 direction={'row'}
-                                key={`cookitme${index}`}
+                                key={`cookbook${cookbook.cookbook_id}-cookitme${cookitem_index}`}
                                 my={'3px'}
                               >
                                 <Input
                                   defaultValue={value.item?.toString()}
                                   {...register(
-                                    `cookitem.${cookbook.cookbook_id}.item${index}`,
+                                    `cookitem.${cookbook.cookbook_id}.item${cookitem_index}`,
                                   )}
                                   _disabled={{ color: 'black' }}
                                 />
@@ -225,7 +230,7 @@ const Home = () => {
                                   defaultValue={Number(value.quantity)}
                                   textAlign={'right'}
                                   {...register(
-                                    `cookitem.${cookbook.cookbook_id}.quantity${index}`,
+                                    `cookitem.${cookbook.cookbook_id}.quantity${cookitem_index}`,
                                     { valueAsNumber: true },
                                   )}
                                   _disabled={{ color: 'black' }}
@@ -237,7 +242,7 @@ const Home = () => {
                                   _disabled={{ color: 'black' }}
                                   defaultValue={Number(value.unit)}
                                   {...register(
-                                    `cookitem.${cookbook.cookbook_id}.unit${index}`,
+                                    `cookitem.${cookbook.cookbook_id}.unit${cookitem_index}`,
                                   )}
                                 >
                                   {Unit_Master.map((data, index) => (
@@ -254,8 +259,7 @@ const Home = () => {
                                   colorScheme='red'
                                   as={Button}
                                   onClick={() => {
-                                    // remove(index);
-                                    removeCookItem();
+                                    removeCookItem(index, cookitem_index);
                                   }}
                                 >
                                   <DeleteIcon />
@@ -268,12 +272,7 @@ const Home = () => {
                               colorScheme='blue'
                               as={Button}
                               onClick={() => {
-                                // append({
-                                //   item: '',
-                                //   quantity: null,
-                                //   unit: null,
-                                // });
-                                addCookItem(cookbook);
+                                addCookItem(cookbook, index);
                               }}
                             >
                               <AddIcon />

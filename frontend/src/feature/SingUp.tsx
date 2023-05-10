@@ -8,7 +8,7 @@ import {
   Spacer,
   useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,6 +19,7 @@ import Link from 'next/link';
 import UserPolicy from './UserPolicy';
 import { GetUser } from '../hooks/users/fetchUser';
 import error from 'next/error';
+import { UserContext } from '@/pages/_app';
 
 const SingUp = () => {
   const {
@@ -33,6 +34,7 @@ const SingUp = () => {
   const [userpolicy, setUserPolicy] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
 
   const handleSubmit = (data: any) => {
     // e.preventDefault();
@@ -44,7 +46,8 @@ const SingUp = () => {
     const user: User = await resp?.json();
     if (user) {
       console.log('sucsess');
-      localStorage.setItem('user', JSON.stringify(user));
+      // localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
       router.push(`contents`);
     } else {
       toast({
@@ -69,6 +72,7 @@ const SingUp = () => {
           position: 'top',
           isClosable: true,
         });
+        setUser(data);
         getuser(getValues().username, getValues().password1).then(() =>
           router.push(`/contents`),
         );

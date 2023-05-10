@@ -1,3 +1,4 @@
+import { UserContext } from '@/pages/_app';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -12,10 +13,11 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { destroyCookie } from 'nookies';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const HeaderComponent = () => {
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
   return (
     <Box px={4} h={50} bgColor={'#edf2f7'}>
       <Flex>
@@ -36,6 +38,7 @@ const HeaderComponent = () => {
               onClick={() => {
                 destroyCookie(null, 'accessToken');
                 destroyCookie(null, 'refreshToken');
+                setUser(null);
                 router.push('/');
               }}
               as={Button}

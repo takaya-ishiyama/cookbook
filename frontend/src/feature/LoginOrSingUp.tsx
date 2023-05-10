@@ -1,10 +1,10 @@
-import Login from '@/src/components/Login';
-import SingUp from '@/src/components/SingUp';
+import Login from '@/src/feature/Login';
+import SingUp from '@/src/feature/SingUp';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-const login_and_singup = () => {
+const LoginOrSingup = () => {
   const [switch_component, setSwitchComponent] = useState<boolean>(true);
   const router = useRouter();
   function DisplayLoginOrSingUp({
@@ -19,11 +19,11 @@ const login_and_singup = () => {
 
   return (
     <>
-      <Flex>
+      <Flex direction={'column'}>
         {switch_component ? (
           <>
             <Button onClick={() => setSwitchComponent(!switch_component)}>
-              ユーザー登録
+              ユーザー登録へ
             </Button>
           </>
         ) : (
@@ -40,4 +40,4 @@ const login_and_singup = () => {
   );
 };
 
-export default login_and_singup;
+export default LoginOrSingup;

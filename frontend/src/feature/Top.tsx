@@ -9,8 +9,9 @@ export const Top = () => {
   return (
     <>
       <Flex direction={'column'}>
-        <Box fontSize={'20px'}>開発中</Box>
-        <Link href='/contents'>ホームへ</Link>
+        {/* <Box fontSize={'20px'}>開発中</Box>
+        <Link href='/contents'>ホームへ</Link> */}
+        <Box>loading</Box>
       </Flex>
     </>
   );

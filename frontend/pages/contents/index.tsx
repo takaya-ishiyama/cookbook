@@ -1,4 +1,4 @@
-import Home from '@/src/components/MainContents/Home';
+import Home from '@/src/feature/MainContents/List';
 import React from 'react';
 
 const index = () => {

@@ -32,6 +32,7 @@ export const Unit_Master = [
 ];
 
 export type CookItems = {
+  cookitem_id?: number | null;
   item?: string | null;
   quantity?: number | null;
   unit?: number | null;
